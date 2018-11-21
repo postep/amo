@@ -1,0 +1,60 @@
+\documentclass[]{article}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+%opening
+\title{AMO - Projekt 1, zestaw 25}
+\author{Jakub Postępski}
+
+\begin{document}
+
+\maketitle
+
+
+\section{Układ równań współrzędnych kartezjańskich}
+Dla każdego punktu w układzie współrzędnych "geograficznych" mamy:
+\[ x = r\cos \theta \cos \phi \]
+\[ y = r\cos \theta \sin \phi \]
+\[ z = r\sin \theta \]
+gdzie $ \theta $ to długość geograficzna i $ \phi $ to szerokość geograficzna.
+
+Dla każdego punktu w układzie współrzędnych kartezjańskich mamy:
+\[ r = \sqrt{x^2 + y^2 + z^2}\]
+\[ \theta = \arctan \frac{y}{x} \]
+\[ \phi = \arcsin \frac{z}{r} \]
+
+Zakładamy, że czas dotarcia dla każdego satelity obarczony jest błędem $b_i$ oraz prędkość swiatła $c=299792458$ m/s.
+
+Szukane współrzędne w układzie kartezjańskim punktu oznaczymy jako $x$, $y$ oraz $z$, a w układzie "geograficznym" jako $r$, $\theta$, $\phi$. Współrzędne satelit będziemy oznaczać z dolnymi indeksami odpowiadającymi numerowi satelity.
+
+
+\section{Zadanie optymalizacji w układzie wsp. kartezjańskich} 
+Należy zminiamalizować sumę kwadratów funkcji $f(x)$ wyrażających błąd pomiędzy zmierzonym a rzeczywistym czasem dotarcia sygnału z satelit do odbiornika.
+
+\[ \min || f(x) || = \min (f(x_1)^2 + ... + f(x_5)^2)\]
+
+dla funkcji:
+
+\[ f(x_i) = \sqrt{(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2}-t_i*C\]
+
+gdzie: 
+\begin{itemize}
+	\item $x$, $y$, $z$ to wsp. szukanego punktu
+	\item $x_i$, $y_i$, $z_i$ to wsp. odpowiedniego satelity
+	\item $t_i$ to zmierzony czas dotarcia sygnału z satelity
+	\item $C$ to stała określająca prędkość światła
+\end{itemize}
+
+\section{Rozwiązanie zadania}
+Oba programy wyznaczyły podobne położenie.
+\subsection{Matlab}
+Otrzymano następujący punkt:
+\subsection{AMPL/Minos}
+\section{Zaburzanie wyniku}
+\subsection{Czasu pojedynczego satelity}
+\subsection{Wsp. pojedynczego satelity}
+\subsection{Czasu wszystkich satelitów}
+\subsection{Wsp. wszystkich satelit}
+
+\end{document}
