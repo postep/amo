@@ -1,3 +1,4 @@
+global x y z t C;
 theta = [52.885907, 50.312052, 47.796902, 50.619584, 55.488272]';
 phi = [13.395837, 12.373351, 19.381854, 26.244260, 28.787526]';
 r = ones(5, 1)*(20000000+6378137);
@@ -11,12 +12,13 @@ y = r.*cos(theta).*sin(phi);
 z = r.*sin(theta);
 
 
-fun = @(P) sqrt((x-P(1)).^2 + (y-P(2)).^2 + (z-P(3)).^2) - t.*C;
-P0 = [0; 0; 0];
-P = lsqnonlin(fun, P0); 
+P0 = [1000; 1000; 1000];
+options = optimoptions('lsqnonlin','Display','iter');
+options.Algorithm = 'levenberg-marquardt';
+options.SpecifyObjectiveGradient = true;
+P = lsqnonlin(@fun, P0, [], [], options);
 
 r_p = sqrt(sum(P.^2));
-disp(6378137-r_p);
 
 theta_p = asin(P(3)/r_p);
 phi_p = atan(P(2)/P(1));
@@ -24,5 +26,20 @@ phi_p = atan(P(2)/P(1));
 theta_p = 180*theta_p/pi;
 phi_p = 180*phi_p/pi;
 
-disp(theta_p);
-disp(phi_p);
+disp(r_p-6378137);
+theta_p
+phi_p
+
+[F, J] = fun(P0)
+function [F,J] = fun(P)
+    global x y z t C;
+    s = @(P) sqrt((x-P(1)).^2 + (y-P(2)).^2 + (z-P(3)).^2) - t.*C;
+    F = s(P);
+    if nargout > 1
+        J1fun = @(P) (x-P(1))./sqrt((x-P(1)).^2 + (y-P(2)).^2 + (z-P(3)).^2);
+        J2fun = @(P) (y-P(2))./sqrt((x-P(1)).^2 + (y-P(2)).^2 + (z-P(3)).^2);
+        J3fun = @(P) (z-P(3))./sqrt((x-P(1)).^2 + (y-P(2)).^2 + (z-P(3)).^2);
+        J = [J1fun(P), J2fun(P), J3fun(P)];
+    end
+end
+

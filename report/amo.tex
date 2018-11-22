@@ -2,6 +2,9 @@
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{legalpaper, margin=0.5in}
 
 %opening
 \title{AMO - Projekt 1, zestaw 25}
@@ -32,7 +35,7 @@ Szukane współrzędne w układzie kartezjańskim punktu oznaczymy jako $x$, $y$
 \section{Zadanie optymalizacji w układzie wsp. kartezjańskich} 
 Należy zminiamalizować sumę kwadratów funkcji $f(x)$ wyrażających błąd pomiędzy zmierzonym a rzeczywistym czasem dotarcia sygnału z satelit do odbiornika.
 
-\[ \min || f(x) || = \min (f(x_1)^2 + ... + f(x_5)^2)\]
+\[ \min || f(x) ||^2_2 = \min (f(x_1)^2 + ... + f(x_5)^2)\]
 
 dla funkcji:
 
@@ -46,15 +49,38 @@ gdzie:
 	\item $C$ to stała określająca prędkość światła
 \end{itemize}
 
+\section{Jakobian funkcji optymalizowanej}
+
 \section{Rozwiązanie zadania}
-Oba programy wyznaczyły podobne położenie.
-\subsection{Matlab}
-Otrzymano następujący punkt:
-\subsection{AMPL/Minos}
+Oba programy (Matlab oraz AMPL) wyznaczyły to samo położenie 
+\[ \theta = 51.3759 , \phi = 21.3779 \] i tą samą wysokość nad poziomem morza ($172$ m).
+
+
 \section{Zaburzanie wyniku}
+Zaburzanie wyników wykonano w programie Matlab
 \subsection{Czasu pojedynczego satelity}
+
 \subsection{Wsp. pojedynczego satelity}
 \subsection{Czasu wszystkich satelitów}
-\subsection{Wsp. wszystkich satelit}
+\subsection{Wsp. wszystkich satelitów}
+
+\section{Zmiana parametrów solwera Matlaba}
+Na początku zastosowano domyślny algorytm Trust Region Reflective, który zatrzymywał się po 22 iteracjach. Algorytm Levenberga-Marquardta (stosowany do dalszych badań) zatrzymał się po 5 iteracjach, co świadczy o jego znacznej przewadze.
+
+\section{Google Maps}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.99\linewidth]{daleko}
+	\caption{Widok daleki znalezionego punktu}
+	\label{fig:daleko}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.99\linewidth]{blisko}
+	\caption{Widok miejscowości znalezionego punktu}
+	\label{fig:blisko}
+\end{figure}
+
 
 \end{document}
