@@ -4,7 +4,9 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
-\geometry{legalpaper, margin=0.5in}
+\usepackage{float}
+
+\geometry{legalpaper, margin=0.6in}
 
 %opening
 \title{AMO - Projekt 1, zestaw 25}
@@ -27,19 +29,15 @@ Dla każdego punktu w układzie współrzędnych kartezjańskich mamy:
 \[ \theta = \arctan \frac{y}{x} \]
 \[ \phi = \arcsin \frac{z}{r} \]
 
-Zakładamy, że czas dotarcia dla każdego satelity obarczony jest błędem $b_i$ oraz prędkość swiatła $c=299792458$ m/s.
 
-Szukane współrzędne w układzie kartezjańskim punktu oznaczymy jako $x$, $y$ oraz $z$, a w układzie "geograficznym" jako $r$, $\theta$, $\phi$. Współrzędne satelit będziemy oznaczać z dolnymi indeksami odpowiadającymi numerowi satelity.
-
-
-\section{Zadanie optymalizacji w układzie wsp. kartezjańskich} 
+\section{Zadanie optymalizacji}
 Należy zminiamalizować sumę kwadratów funkcji $f(x)$ wyrażających błąd pomiędzy zmierzonym a rzeczywistym czasem dotarcia sygnału z satelit do odbiornika.
 
 \[ \min || f(x) ||^2_2 = \min (f(x_1)^2 + ... + f(x_5)^2)\]
 
 dla funkcji:
 
-\[ f(x_i) = \sqrt{(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2}-t_i*C\]
+\[ f(x_i) = \sqrt{(x-x_i)^2 + (y-y_i)^2 + (z-z_i)^2}-t_iC\]
 
 gdzie: 
 \begin{itemize}
@@ -49,38 +47,61 @@ gdzie:
 	\item $C$ to stała określająca prędkość światła
 \end{itemize}
 
-\section{Jakobian funkcji optymalizowanej}
+\section{Jakobian}
+Ponieważ współrzędne satelitów zdefiniowane są w układzie "geograficznym", a zadanie optymalizacji jest zdefiniowane w układzie współrzędnych kartezjańskich wyznaczono jakobian:
+\[J = \begin{bmatrix}
+J_1\\
+J_2\\
+J_3\\
+J_4\\
+J_5\\
+\end{bmatrix}\]
+
+z wierszami postaci:
+\[J_i = \begin{bmatrix} 
+	\frac{x - x_i}{\sqrt{(x_i - x)^2 + (y_i - y)^2 + (z_i - z)^2}} & 
+	\frac{y - y_i}{\sqrt{(x_i - x)^2 + (y_i - y)^2 + (z_i - z)^2}} & 
+	\frac{z - z_i}{\sqrt{(x_i - x)^2 + (y_i - y)^2 + (z_i - z)^2}}
+\end{bmatrix} \]
 
 \section{Rozwiązanie zadania}
 Oba programy (Matlab oraz AMPL) wyznaczyły to samo położenie 
 \[ \theta = 51.3759 , \phi = 21.3779 \] i tą samą wysokość nad poziomem morza ($172$ m).
 
-
-\section{Zaburzanie wyniku}
-Zaburzanie wyników wykonano w programie Matlab
-\subsection{Czasu pojedynczego satelity}
-
-\subsection{Wsp. pojedynczego satelity}
-\subsection{Czasu wszystkich satelitów}
-\subsection{Wsp. wszystkich satelitów}
-
-\section{Zmiana parametrów solwera Matlaba}
-Na początku zastosowano domyślny algorytm Trust Region Reflective, który zatrzymywał się po 22 iteracjach. Algorytm Levenberga-Marquardta (stosowany do dalszych badań) zatrzymał się po 5 iteracjach, co świadczy o jego znacznej przewadze.
-
 \section{Google Maps}
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.99\linewidth]{daleko}
 	\caption{Widok daleki znalezionego punktu}
 	\label{fig:daleko}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.99\linewidth]{blisko}
 	\caption{Widok miejscowości znalezionego punktu}
 	\label{fig:blisko}
 \end{figure}
+
+\section{Zmiana parametrów optymalizacji}
+Na początku zastosowano domyślny algorytm Trust Region Reflective, który zatrzymywał się po 22 iteracjach. 
+
+Algorytm Levenberga-Marquardta (stosowany do dalszych badań) zatrzymał się po 5 iteracjach, co świadczy o jego znacznej przewadze. Po podaniu jakobianu 
+algorytm zatrzymał się także po 4 iteracjach.
+
+\subsection{Zmiana punktu startowego}
+Po zadaniu punktu startowego, którego współrzędne były bardzo dużymi liczbami liczba iteracji algorytmu zwiększyła się do 5. Uzyskany wynik zawsze był taki sam.
+\subsection{Zmiana warunku stopu}
+Domyślna tolerancja pozwala na uzyskanie dość dokładnych wyników. Wykonywane jest wtedy 4 iteracji algorytmu. Od 3 iteracji możemy uznać, że uzyskane wyniki są dość dokładne.
+
+Zmniejszanie domyślnej tolerancji algorytmu nie spowodowało wykonania dodatkowych iteracji algorytmu. Oznacza to, że błędy numeryczne nie pozwalają uzyskać większej dokładności niż domyślna. 
+
+Zwiększanie tolerancji do $10^{-5}$ nie spowodowało znaczącej zmiany wyniku optymalizacji. Dalsze zmniejszanie tolerancji spowodowało zmniejszenie dokładności przez fakt wykonania mniejszej liczby iteracji algorytmu. Ustawienie tolerancji większej od $1$ powoduje, że wykonanie algorytmu nie ma sensu.
+
+\subsection{Zaburzanie danych wejściowych}
+Do eksperymentów zaburzano parametry piątego satelity. Zmiana szerokości i długości geograficznej do 10 \% nie powoduje dużej zmiany wyniku. Większe zmiany powodują znaczne zmiany. Algorytm jest dużo bardziej czuły na zmiany czasu przesyłu. Zmiana o 5 \% powoduje znaczny błąd optymalizacji. Wynika to z definicji problemu optymalizacji. Promień sfery definiowany jest czasem ma duży wpływ na całe obliczenia.
+
+
 
 
 \end{document}
