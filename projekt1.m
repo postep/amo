@@ -11,7 +11,6 @@ x = r.*cos(theta).*cos(phi);
 y = r.*cos(theta).*sin(phi);
 z = r.*sin(theta);
 
-t(5) = 1.5*t(5);
 P0 = [0; 0; 0];
 options = optimoptions('lsqnonlin','Display','iter');
 options.Algorithm = 'levenberg-marquardt';
