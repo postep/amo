@@ -15,7 +15,7 @@ P0 = [0; 0; 0];
 options = optimoptions('lsqnonlin','Display','iter');
 options.Algorithm = 'levenberg-marquardt';
 options.SpecifyObjectiveGradient = true;
-%options.FunctionTolerance = 1e-80;
+%options.FunctionTolerance = 1;
 [P,resnorm,residual,exitflag,output] = lsqnonlin(@fun, P0, [], [], options)
 
 r_p = sqrt(sum(P.^2));
