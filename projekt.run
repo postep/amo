@@ -1,8 +1,0 @@
-reset;
-model diet.mod;
-data diet.dat;
-option solver minos;
-option minos_options 'crash_option=0 \
-		feasibility_tolerance=1.0e-8 scale=no \
-		iterations_limit=100';
-solve;

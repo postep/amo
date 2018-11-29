@@ -1,0 +1,15 @@
+reset;
+model projekt1.mod;
+option solver minos;
+option minos_options 'crash_option=0 \
+		feasibility_tolerance=1.0e-6 scale=no \
+		iterations_limit=100';
+solve;
+
+var R = sqrt(x^2 + y^2 + z^2);
+var THETA = atan(y/x)*180/pi;
+var PHI = asin(z/R)*180/pi;
+
+display R-6378137;
+display(THETA);
+display(PHI);
