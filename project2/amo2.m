@@ -1,6 +1,3 @@
-clear variables;
-
-
 %% generowanie danych
 largedata = 0
 if largedata == 0
@@ -23,7 +20,7 @@ largedata = 1
 if largedata == 1
 	heartdata = [cell2mat(saheart(:, 1:4)), strcmp(saheart(:, 5), 'Present'), cell2mat(saheart(:, 6:end))];
 	heartdata(:,end) = (heartdata(:, end)-0.5)*2;
-	heartdata(:,5) = (heartdata(:, 5)-0.5)*2;
+%	heartdata(:,5) = (heartdata(:, 5)-0.5)*2;
 
 	dim = size(heartdata);
 	len = dim(1);
@@ -60,7 +57,7 @@ for i = 1:len
 	Wd = Wd + C(i) * setY(i) * setX(i, :);
 end;
 
-greatInx = find(C > 1e-5);
+greatInx = find(C > 1e-10);
 
 bd = Wd*setX(greatInx(1), :)' - setY(greatInx(1));
 class_dual = sign(setX*Wd' - bd);
@@ -72,4 +69,18 @@ legend('dane', 'problem prymalny', 'problem dualny');
 title('Porownanie klasyfikatorow');
 ylim([-1.5 1.5])
 xlim([0, len+1])
+
+err_prim = 0;
+err_dual = 0;
+for i = 1:len
+	if setY(i) ~= class_prim(i)
+		err_prim = err_prim + 1;
+	end
+	if setY(i) ~= class_dual(i)
+		err_dual = err_dual + 1;
+	end
+end
+
+err_prim/len
+err_dual/len
 
